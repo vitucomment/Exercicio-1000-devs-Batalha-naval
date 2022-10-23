@@ -21,16 +21,16 @@ public class BatalhaNaval {
 		String[][] boardNpc = new String[qtd][qtd];
 		String[][] boardNpcHide = new String[qtd][qtd];
 
-		boardJogador = preencheBoard(boardJogador, ".");
-		boardNpc = preencheBoard(boardNpc, ".");
-		boardNpcHide = preencheBoard(boardNpcHide, ".");
+		boardJogador = preencheBoardInicial(boardJogador, ".");
+		boardNpc = preencheBoardInicial(boardNpc, ".");
+		boardNpcHide = preencheBoardInicial(boardNpcHide, ".");
 		boardNpcHide = preencheBoardNpc(boardNpcHide);
 		preencheBoardComJogadas(boardJogador, boardNpc, input);
 		limpaEDesenha(boardJogador, boardNpc);
 		imprimeRegrasDoJogo();
 
 		while (true) {
-			
+
 			// BLOCO QUE PEGA ESCOLHAS DO JOGADOR
 			input = new Scanner(System.in);
 			String[] escolha = capturaEscolha(input);
@@ -75,7 +75,7 @@ public class BatalhaNaval {
 				break;
 			}
 
-			//BLOCO QUE GERA AS ESCOLHAS DO COMPUTADOR.
+			// BLOCO QUE GERA AS ESCOLHAS DO COMPUTADOR.
 			Integer npcL = aleatorio();
 			Integer npcC = aleatorio();
 			while (true) {
@@ -83,7 +83,7 @@ public class BatalhaNaval {
 					npcL = aleatorio();
 					npcC = aleatorio();
 				}
-				
+
 				System.out.println("O computador jogou na posicao: [LINHA: " + npcL + "] [COLUNA: " + npcC + "]");
 				new Thread().sleep(2500);
 				if (!posicaoDoJogadorEhValida(boardJogador, npcL, npcC)) {
@@ -130,15 +130,13 @@ public class BatalhaNaval {
 	}
 
 	private static Integer retornaLinha(String[] escolha) {
-		Integer L = Integer.parseInt(escolha[0]);
-		return L;
+		return Integer.parseInt(escolha[0]);
 	}
 
 	private static Integer retornaColuna(String[] escolha) {
 		String letra = escolha[1].toUpperCase();
 		String letras = ("-ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		Integer escolhaEmNumero = letras.indexOf(letra);
-		return escolhaEmNumero;
+		return letras.indexOf(letra);
 	}
 
 	private static String[] capturaEscolha(Scanner input) {
@@ -183,16 +181,13 @@ public class BatalhaNaval {
 	}
 
 	private static void preencheBoardComJogadas(String[][] boardJogador, String[][] boardNpc, Scanner input) {
-		int qtdEscolhas = qtdDeEscolhasPorBoard();
-
+		int qtdEscolhas = qtdDeEscolhasPorDificuldade();
 		for (int i = 1; i <= qtdEscolhas; i++) {
 			limpaEDesenha(boardJogador, boardNpc);
 			System.out.println("Voce marcara agora " + qtdEscolhas + " barcos para iniciarmos o jogo!");
 			String[] escolha = capturaEscolha(input);
-
 			Integer L = retornaLinha(escolha);
 			Integer C = retornaColuna(escolha);
-
 			boolean ehValido = posicaoDoJogadorEhValida(boardJogador, L, C);
 			while (ehValido == false) {
 				limpaEDesenha(boardJogador, boardNpc);
@@ -209,20 +204,19 @@ public class BatalhaNaval {
 		limpaEDesenha(boardJogador, boardNpc);
 	}
 
-	private static int qtdDeEscolhasPorBoard() {
+	private static int qtdDeEscolhasPorDificuldade() {
 		int qtdEscolhas = 0;
-		if (qtd == 9) {
+		if (qtd == 9)
 			qtdEscolhas = 10;
-		} else if (qtd == 18) {
+		else if (qtd == 18)
 			qtdEscolhas = 20;
-		} else if (qtd == 26) {
+		else if (qtd == 26)
 			qtdEscolhas = 30;
-		}
 		return qtdEscolhas;
 	}
 
 	private static String[][] preencheBoardNpc(String[][] boardNpcHide) {
-		int qtdEscolhas = qtdDeEscolhasPorBoard();
+		int qtdEscolhas = qtdDeEscolhasPorDificuldade();
 		for (int i = 0; i < qtdEscolhas; i++) {
 			int rand1 = aleatorio();
 			int rand2 = aleatorio();
@@ -237,7 +231,7 @@ public class BatalhaNaval {
 		return boardNpcHide;
 	}
 
-	private static String[][] preencheBoard(String[][] board, String x) {
+	private static String[][] preencheBoardInicial(String[][] board, String x) {
 		for (int i = 0; i < qtd; i++) {
 			for (int j = 0; j < qtd; j++) {
 				board[i][j] = x + "";
@@ -247,13 +241,12 @@ public class BatalhaNaval {
 	}
 
 	private static void desenhaBoard(String[][] boardJogador, String[][] boardNpc) {
-		if (qtd == 9) {
+		if (qtd == 9)
 			System.out.println("   \tTabuleiro do jogador \t\t\tTabuleiro do Computador\n");
-		} else if (qtd == 18) {
+		else if (qtd == 18)
 			System.out.println("   \t\tTabuleiro do jogador \t\t\t\t\t\t Tabuleiro do Computador\n");
-		} else if (qtd == 26) {
+		else if (qtd == 26)
 			System.out.println("   \t\t\tTabuleiro do jogador \t\t\t\t\t\t\t\t Tabuleiro do Computador\n");
-		}
 
 		cabecalhoBoardCima();
 		divisaoBoardCima();
@@ -283,76 +276,56 @@ public class BatalhaNaval {
 
 	private static void divisaoBoardCima() {
 		System.out.print("  \t+");
-		for (int l = 0; l < (qtd * 2) + 1; l++) {
-			System.out.print("-");
-		}
+		imprimeDivisaoBoard();
 		System.out.print("+");
-		if (qtd == 9) {
+
+		if (qtd == 9)
 			System.out.print("\t\t\t");
-		} else if (qtd == 18) {
+		else
 			System.out.print("\t\t\t\t");
-		} else if (qtd == 26) {
-			System.out.print("\t\t\t\t");
-
-		}
 
 		System.out.print("+");
-		for (int l = 0; l < (qtd * 2) + 1; l++) {
-			System.out.print("-");
-		}
+		imprimeDivisaoBoard();
 		System.out.println("+");
 	}
 
 	private static void divisaoBoardBaixo() {
 		System.out.print("  \t+");
-		for (int l = 0; l < (qtd * 2) + 1; l++) {
-			System.out.print("-");
-		}
+		imprimeDivisaoBoard();
 		System.out.print("+");
 
-		if (qtd == 9) {
+		if (qtd == 9)
 			System.out.print("\t\t\t+");
-		} else if (qtd == 18) {
-			System.out.print("\t\t\t\t+");
-		} else if (qtd == 26) {
+		else
 			System.out.print("\t\t\t\t+");
 
-		}
-
-		for (int l = 0; l < (qtd * 2) + 1; l++) {
-			System.out.print("-");
-		}
+		imprimeDivisaoBoard();
 		System.out.println("+");
 	}
 
+	private static void imprimeDivisaoBoard() {
+		for (int l = 0; l < (qtd * 2) + 1; l++) {
+			System.out.print("-");
+		}
+	}
+
 	private static void cabecalhoBoardCima() {
-		String letras = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-
-		if (qtd == 9) {
-			System.out.print("\t  ");
-		} else if (qtd == 18) {
-			System.out.print("\t  ");
-		} else if (qtd == 26) {
-			System.out.print("\t  ");
-		}
-
-		for (int l = 0; l < qtd; l++) {
-			System.out.print(letras.charAt(l) + " ");
-		}
-
+		System.out.print("\t  ");
+		imprimeCabecalhoDeLetras();
 		if (qtd == 9) {
 			System.out.print("\t\t\t  ");
-		} else if (qtd == 18) {
-			System.out.print("\t\t\t\t  ");
-		} else if (qtd == 26) {
+		} else {
 			System.out.print("\t\t\t\t  ");
 		}
+		imprimeCabecalhoDeLetras();
+		System.out.println();
+	}
 
+	private static void imprimeCabecalhoDeLetras() {
+		String letras = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		for (int l = 0; l < qtd; l++) {
 			System.out.print(letras.charAt(l) + " ");
 		}
-		System.out.println();
-
 	}
 
 	private static void imprimeRegrasDoJogo() {
@@ -365,32 +338,29 @@ public class BatalhaNaval {
 
 	private static void bordaRegraDoJogo() {
 		System.out.println("\n");
-		for (int i = 0; i <= 30; i++) {
-			System.out.print("=");
-		}
+		imprimeLinhaDeDivisao();
 		System.out.print(" Regras do Jogo ");
-		for (int i = 0; i <= 30; i++) {
-			System.out.print("=");
-		}
+		imprimeLinhaDeDivisao();
 		System.out.println("\n");
 	}
 
 	private static void imprimeMenuInicial() {
 		System.out.println("\n");
-		for (int i = 0; i <= 30; i++) {
-			System.out.print("=");
-		}
+		imprimeLinhaDeDivisao();
 		System.out.print("BEM VINDO AO JOGO DA BATALHA NAVAL");
-		for (int i = 0; i <= 30; i++) {
-			System.out.print("=");
-		}
-
+		imprimeLinhaDeDivisao();
 		System.out.println("\nESCOLHA O TAMANHO DO TABULEIRO:");
 		System.out.println("1 - 9x9   = (10 EMARCARCOES)");
 		System.out.println("2 - 18x18 = (20 EMARCARCOES)");
 		System.out.println("3 - 26x26 = (30 EMARCARCOES)");
-		System.out.println("\nSUA ESCOLHA: ");
+		System.out.print("\nSUA ESCOLHA: ");
 
+	}
+
+	private static void imprimeLinhaDeDivisao() {
+		for (int i = 0; i <= 30; i++) {
+			System.out.print("=");
+		}
 	}
 
 	private static int escolhaDeDificuldade(Scanner input) {
@@ -399,14 +369,13 @@ public class BatalhaNaval {
 			System.out.println("ESCOLHA ENTRE AS OPCOES 1 - 2 - 3: ");
 			escolha = input.nextInt();
 		}
-
-		if (escolha == 1) {
+		if (escolha == 1)
 			return 9;
-		} else if (escolha == 2) {
+		else if (escolha == 2)
 			return 18;
-		} else {
+		else
 			return 26;
-		}
+
 	}
 
 	public static void limpaConsole() {
@@ -421,7 +390,6 @@ public class BatalhaNaval {
 
 	public static int aleatorio() {
 		Random aleatorio = new Random();
-		int valor = aleatorio.nextInt(qtd) + 1;
-		return valor;
+		return aleatorio.nextInt(qtd) + 1;
 	}
 }
